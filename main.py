@@ -74,6 +74,7 @@ def main():
     ann_json = api.task.send_request(task_id, "inference_image_id", data={"image_id": image_id})
     ann = sly.Annotation.from_json(ann_json, model_meta)
     img = api.image.download_np(image_id)
+    sly.image.write("./images/03_input_id.jpg", img)
     visualize(img, ann, "03_prediction_id.jpg")
 
     # apply model to image id (only ROI - region of interest)
@@ -88,6 +89,7 @@ def main():
                                          "rectangle": [top, left, bottom, right]
                                      })
     ann = sly.Annotation.from_json(ann_json, model_meta)
+    sly.image.write("./images/04_input_id_roi.jpg", img)
     visualize(img, ann, "04_prediction_id_roi.jpg", roi)
 
     # apply model to several images (using id)
@@ -96,6 +98,7 @@ def main():
     for ind, (image_id, ann_json) in enumerate(zip(batch_ids, resp)):
         ann = sly.Annotation.from_json(ann_json, model_meta)
         img = api.image.download_np(image_id)
+        sly.image.write(f"./images/05_input_batch_{ind:03d}_{image_id}.jpg", img)
         visualize(img, ann, f"05_prediction_batch_{ind:03d}_{image_id}.jpg")
 
 
